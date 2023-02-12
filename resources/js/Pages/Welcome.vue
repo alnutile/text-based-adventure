@@ -152,7 +152,7 @@ export default {
             axios.post(route('startStory'), {
                 genre: this.genre
             }).then(data => {
-                console.log(data)
+
             })
                 .catch(e => {
                     console.log(e.message);
