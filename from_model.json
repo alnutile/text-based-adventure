@@ -1,0 +1,12 @@
+{
+  "id": "cmpl-6fX9bnMCUhQ2SXsCnNw71254Xryqr",
+  "model": "text-davinci-003",
+  "messages": [
+    {
+      "message": "<br><br>Facebook Terms of Service: <br>TL;DR: When you use Facebook, you agree to not break the law or post offensive content. You agree to let Facebook use your content and your data however it wants. You'll need to be 13 or older to use the service and accept responsibility for your actions. Facebook won't be held responsible for any of your losses or damages."
+    }
+  ],
+  "search_term": "Can You Give Me Tl;Dr Terms Of Service For Facebook",
+  "prompt_tokens": "13",
+  "completion_tokens": "78"
+}

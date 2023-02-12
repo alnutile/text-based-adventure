@@ -1,0 +1,24 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - app
+
+    # The level 8 is the highest level
+    level: 5
+
+    #ignoreErrors:
+
+    excludePaths:
+        - app/Models/User
+        - app/Nova/Resource
+        - app/Http/Controllers/RecipeController
+        - app/Actions/Fortify/UpdateUserProfileInformation.php
+        - app/Http/Middleware/Authenticate.php
+        - app/Console/Commands/OptimizeImages.php
+        - app/Http/Controllers/Auth/*
+        - app/Http/Resources/*
+
+    checkMissingIterableValueType: false
