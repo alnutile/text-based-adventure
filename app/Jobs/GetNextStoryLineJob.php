@@ -66,12 +66,10 @@ class GetNextStoryLineJob implements ShouldQueue
 
             $story[] = $nextPartOfStory;
             $play[] = $validatedPlay;
+            $zippedArray[] = $validatedPlay;
             if (! in_array($nextPartOfStory, $zippedArray)) {
                 $zippedArray[] = $nextPartOfStory;
             }
-
-            $zippedArray[] = $validatedPlay;
-
             Cache::set($this->sessionId, [
                 'genre' => $genre,
                 'story' => $story,
