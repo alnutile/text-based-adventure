@@ -84,7 +84,7 @@ rounded-b-lg text-gray-700 text-sm lowercase text-center
                         </div>
                     </div>
                 </div>
-                <div class="flex space-x-4 mt-4" v-if="!running && next_story_line">
+                <div class="flex space-x-4 mt-4 text-3xl" v-if="!running && next_story_line">
                     {{ next_story_line }}
                 </div>
             </div>
@@ -121,6 +121,7 @@ export default {
             toast: useToast(),
             results: [],
             error: null,
+            previous: {}
         }
     },
     computed: {
@@ -142,13 +143,14 @@ export default {
             this.form.genre = chosenGenre;
             this.form.get(route('home'), {
                 preserveScroll: true,
+                preserveState: true,
                 onStart: () => {
                     this.running = true;
                     this.waitingOnAi = true;
                     this.firstStoryRun = true;
                 },
-                onSuccess: () => {
-                    this.next_story_line = this.story;
+                onSuccess: (data) => {
+                    this.next_story_line = data.props.story;
                     this.running = false;
                     this.waitingOnAi = false;
                     this.firstStoryRun = false;
@@ -166,6 +168,8 @@ export default {
             axios.post(route("player"), {
                 play: this.content
             }).then(data => {
+                console.log(data)
+                this.previous = data.data.previous;
                 this.next_story_line = data.data.next_story_line
                 this.running = false;
             }).catch(e => {
