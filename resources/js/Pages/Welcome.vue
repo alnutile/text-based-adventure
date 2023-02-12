@@ -34,7 +34,7 @@
                                     <textarea
                                         autofocus
                                         required
-                                        :disabled="running || !story"
+                                        :disabled="running || !next_story_line"
                                         v-model="content"
                                         rows="5" name="content" id="content"
                                         placeholder="Your move..."
@@ -52,7 +52,7 @@ rounded-b-lg text-gray-700 text-sm lowercase text-center
                     </div>
                     <div class="mt-4 sm:mt-2">
                         <button
-                            :disabled="running  || !story"
+                            :disabled="running  || !next_story_line"
                             type="submit"
                             class="
                                 disabled:opacity-60
@@ -92,7 +92,6 @@ rounded-b-lg text-gray-700 text-sm lowercase text-center
 </template>
 <script>
 import { Head, Link } from '@inertiajs/vue3';
-import { useForm } from "@inertiajs/vue3";
 import Footer from "@/Components/Footer.vue"
 import RunningDots from "@/Components/RunningDots.vue"
 import {useToast} from "vue-toastification";
@@ -105,21 +104,28 @@ export default {
         Footer,
         Link
     },
-    props: ['genre', 'session_id', 'story'],
+    props: ['prop_session_id'],
+    mounted() {
+        Echo.channel(`story.${this.session_id}`)
+            .listen('.play', (e) => {
+                console.log(e)
+                this.firstStoryRun = false;
+                this.next_story_line = e.next_story_line;
+                this.previous = e.previous
+                this.running = false
+            })
+    },
     data() {
         return {
             next_story_line: null,
-            form: useForm({
-                genre: this.genre,
-                session_id: this.session_id,
-            }),
+            genre: null,
+            session_id: this.prop_session_id,
             content: "",
             limit: 10000,
             waitingOnAi: true,
             firstStoryRun: false,
             running: false,
             toast: useToast(),
-            results: [],
             error: null,
             previous: {}
         }
@@ -140,39 +146,35 @@ export default {
     },
     methods: {
         setGenre(chosenGenre) {
-            this.form.genre = chosenGenre;
-            this.form.get(route('home'), {
-                preserveScroll: true,
-                preserveState: true,
-                onStart: () => {
-                    this.running = true;
-                    this.waitingOnAi = true;
-                    this.firstStoryRun = true;
-                },
-                onSuccess: (data) => {
-                    this.next_story_line = data.props.story;
+            this.genre = chosenGenre;
+            this.running = true;
+            this.firstStoryRun = true;
+            axios.post(route('startStory'), {
+                genre: this.genre
+            }).then(data => {
+                console.log(data)
+            })
+                .catch(e => {
+                    console.log(e.message);
+                    if(e.message === 'Request failed with status code 422') {
+                        this.toast.error(`Hmm keep the text to under ${this.limit} characters`)
+                    } else {
+                        this.error = "Looks like OpenAi API is having a moment..."
+                    }
+
                     this.running = false;
-                    this.waitingOnAi = false;
                     this.firstStoryRun = false;
-                },
-                onError: () => {
-                    this.toast.error("Ooops something is wrong with the story teller 😱")
-                    this.running = false;
-                    this.waitingOnAi = false;
-                    this.firstStoryRun = false;
-                }
-            });
+                });
+
         },
         submit() {
             this.running = true;
             axios.post(route("player"), {
                 play: this.content
             }).then(data => {
-                console.log(data)
-                this.previous = data.data.previous;
-                this.next_story_line = data.data.next_story_line
+                this.previous = [];
                 this.content = null;
-                this.running = false;
+                this.next_story_line = null
             }).catch(e => {
                 console.log(e.message);
                 if(e.message === 'Request failed with status code 422') {
