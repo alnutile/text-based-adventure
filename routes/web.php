@@ -18,6 +18,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', [WelcomeController::class, 'home'])->name('home');
+Route::get('/start_over', [WelcomeController::class, 'startOver'])->name('startOver');
 Route::post('/player', [WelcomeController::class, 'player'])->name('player');
 
 Route::get('/dashboard', function () {

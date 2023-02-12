@@ -1,7 +1,7 @@
 <template>
     <Head title="TextBasedAdventures.ai" />
                 <div class="sm:text-center p-4">
-                    <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">TextBasedAdventures.ai</h2>
+                    <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Text Based Adventures.ai</h2>
                     <div class="mx-auto mt-6 max-w-2xl text-lg text-rose-100">Start your adventure:</div>
                     <div class="flex mx-auto justify-center gap-4 mt-4">
                         <button type="button"
@@ -17,7 +17,7 @@
                                 px-2.5 py-1.5 text-lg font-medium text-green-800 hover:bg-green-200
                                 focus:outline-none
                                 focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Sci-Fi</button>
-                        <Link :href="route('home')"
+                        <Link :href="route('startOver')"
                             type="button"
                             class="inline-flex items-center rounded border border-transparent bg-green-400
                                 px-2.5 py-1.5 text-lg font-medium text-green-800 hover:bg-green-200
@@ -41,7 +41,8 @@
                                         class="
                                         disabled:bg-gray-300
                                         disabled:cursor-not-allowed
-                                        block w-full rounded-t-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                        block w-full rounded-t-lg border-gray-300 shadow-sm
+                                        text-xl focus:border-green-500 focus:ring-green-500" />
 
                             </div>
                             <div class="bg-white p-2
@@ -59,7 +60,7 @@ rounded-b-lg text-gray-700 text-sm lowercase text-center
                                 text-lg
                                 block w-full rounded-md border border-transparent bg-gray-700 px-5 py-3
                                 text-base font-medium text-white shadow hover:bg-black focus:outline-none
-                                focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-rose-500
+                                focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-green-500
                                 sm:px-10 flex justify-center items-center">
                             <RunningDots v-if="running"/>
                             {{ submitLabel }}</button>
@@ -83,8 +84,8 @@ rounded-b-lg text-gray-700 text-sm lowercase text-center
                         </div>
                     </div>
                 </div>
-                <div class="flex space-x-4 mt-4" v-if="!running && story">
-                    {{ story }}
+                <div class="flex space-x-4 mt-4" v-if="!running && next_story_line">
+                    {{ next_story_line }}
                 </div>
             </div>
     </div>
@@ -107,7 +108,7 @@ export default {
     props: ['genre', 'session_id', 'story'],
     data() {
         return {
-            next_story_line: this.story,
+            next_story_line: null,
             form: useForm({
                 genre: this.genre,
                 session_id: this.session_id,
@@ -165,7 +166,7 @@ export default {
             axios.post(route("player"), {
                 play: this.content
             }).then(data => {
-                this.results = data.data;
+                this.next_story_line = data.data.next_story_line
                 this.running = false;
             }).catch(e => {
                 console.log(e.message);

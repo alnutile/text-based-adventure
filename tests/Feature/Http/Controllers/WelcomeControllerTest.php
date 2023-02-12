@@ -7,35 +7,35 @@ use Alnutile\LaravelChatgpt\Events\ModerationFailed;
 use Alnutile\LaravelChatgpt\Facades\ModerationClientFacade;
 use Alnutile\LaravelChatgpt\Facades\TextClientFacade;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Session;
-use Tests\TestCase;
 use Inertia\Testing\AssertableInertia as Assert;
+use Tests\TestCase;
 
 class WelcomeControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_welcome() {
-        $this->get(route("home"))->assertOk()
+    public function test_welcome()
+    {
+        $this->get(route('home'))->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component("Welcome")
-            ->has("session_id")
+            ->component('Welcome')
+            ->has('session_id')
         );
     }
 
-    public function test_makes_request_for_genre() {
+    public function test_makes_request_for_genre()
+    {
         $data = get_fixture('example.json');
         $dto = new ResponseDto($data);
         TextClientFacade::shouldReceive('setTemperature->text')->once()->andReturn($dto);
 
-        $this->get(route("home", ['genre' => 'fantasy']))->assertOk()
+        $this->get(route('home', ['genre' => 'fantasy']))->assertOk()
             ->assertInertia(fn (Assert $page) => $page
-                ->component("Welcome")
-                ->has("session_id")
-                ->has("genre")
-                ->has("story")
+                ->component('Welcome')
+                ->has('session_id')
+                ->has('genre')
+                ->has('story')
             );
     }
 
@@ -51,9 +51,14 @@ class WelcomeControllerTest extends TestCase
             ->json();
 
         $this->assertArrayHasKey('next_story_line', $data);
+
         $this->assertArrayHasKey('previous', $data);
-        $this->assertNotNull(data_get($data, 'previous.story'));
-        $this->assertNotNull(data_get($data, 'previous.player'));
+
+        $this->assertNotNull(data_get($data,
+            'previous.story'));
+
+        $this->assertNotNull(data_get($data,
+            'previous.player'));
     }
 
     public function test_mod_failed()
@@ -61,7 +66,9 @@ class WelcomeControllerTest extends TestCase
         Event::fake();
         TextClientFacade::shouldReceive('text')->never();
         ModerationClientFacade::shouldReceive('checkOk')->once()->andReturnFalse();
-        $this->post(route('search'), ['search' => 'foo'])->assertStatus(200);
+        $data = $this->post(route('player'), ['play' => 'foo'])
+            ->assertStatus(200)
+            ->json();
         Event::assertDispatched(ModerationFailed::class);
     }
 }
