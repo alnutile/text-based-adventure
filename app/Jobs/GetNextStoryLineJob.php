@@ -65,11 +65,17 @@ class GetNextStoryLineJob implements ShouldQueue
                 ->stripTags()->toString());
 
             $story[] = $nextPartOfStory;
+
             $play[] = $validatedPlay;
-            $zippedArray[] = $validatedPlay;
+
+            if (! empty($zippedArray)) {
+                $zippedArray[] = $validatedPlay;
+            }
+
             if (! in_array($nextPartOfStory, $zippedArray)) {
                 $zippedArray[] = $nextPartOfStory;
             }
+
             Cache::set($this->sessionId, [
                 'genre' => $genre,
                 'story' => $story,
