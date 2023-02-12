@@ -171,6 +171,7 @@ export default {
                 console.log(data)
                 this.previous = data.data.previous;
                 this.next_story_line = data.data.next_story_line
+                this.content = null;
                 this.running = false;
             }).catch(e => {
                 console.log(e.message);
