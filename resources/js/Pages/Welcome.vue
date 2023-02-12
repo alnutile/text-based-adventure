@@ -141,7 +141,7 @@ export default {
           }
         },
       characterCount() {
-          return this.content.length;
+          return this.content !== null ? this.content.length : 0;
       }
     },
     methods: {
@@ -173,7 +173,7 @@ export default {
                 play: this.content
             }).then(data => {
                 this.previous = [];
-                this.content = null;
+                this.content = "";
                 this.next_story_line = null
             }).catch(e => {
                 console.log(e.message);
