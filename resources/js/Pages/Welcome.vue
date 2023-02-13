@@ -110,7 +110,6 @@ export default {
     mounted() {
         Echo.channel(`story.${this.session_id}`)
             .listen('.play', (e) => {
-                console.log(e)
                 this.firstStoryRun = false;
                 this.next_story_line = e.next_story_line;
                 this.previous = e.previous
