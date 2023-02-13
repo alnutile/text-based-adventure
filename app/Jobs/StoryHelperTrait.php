@@ -6,12 +6,20 @@ trait StoryHelperTrait
 {
     protected function prefixStory($story): string
     {
-        return str($story)->prepend(' AI:')->toString();
+        if (! str($story)->contains('AI:')) {
+            return str($story)->prepend(' AI:')->toString();
+        }
+
+        return $story;
     }
 
     protected function prefixPlayer($story): string
     {
-        return str($story)->prepend(' Human:')->toString();
+        if (! str($story)->contains('Human:')) {
+            return str($story)->prepend(' Human:')->toString();
+        }
+
+        return $story;
     }
 
     protected function stops()
