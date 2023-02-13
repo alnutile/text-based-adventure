@@ -61,7 +61,7 @@ class GetNextStoryLineJob implements ShouldQueue
             $nextPartOfStory = optional(Arr::first($nextPartOfStory->messages))
                 ->message;
 
-            logger("NextPartOfStory", [$nextPartOfStory]);
+            logger('NextPartOfStory', [$nextPartOfStory]);
 
             $nextPartOfStory = $this->prefixStory(str($nextPartOfStory)
                 ->stripTags()->toString());
