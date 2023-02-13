@@ -41,6 +41,7 @@ class StartStoryJob implements ShouldQueue
         /** @var ResponseDto $startOfStory */
         /** @phpstan-ignore-next-line */
         $startOfStory = TextClientFacade::setTemperature(0.7)
+            ->setStop($this->stops())
             ->text($question);
 
         $startOfStory = optional(Arr::first($startOfStory->messages))->message;

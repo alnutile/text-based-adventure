@@ -18,7 +18,7 @@ class GetNextStoryLineJobTest extends TestCase
         Event::fake();
         $data = get_fixture('example.json');
         $dto = new ResponseDto($data);
-        TextClientFacade::shouldReceive('setTemperature->addPrefix->text')->twice()->andReturn($dto);
+        TextClientFacade::shouldReceive('setTemperature->setStop->addPrefix->text')->twice()->andReturn($dto);
         ModerationClientFacade::shouldReceive('checkOk')->twice()->andReturnTrue();
         $job = new GetNextStoryLineJob(
             'foobar', 'I choose foo'
@@ -32,9 +32,9 @@ class GetNextStoryLineJobTest extends TestCase
 
         $previous = Cache::get('foobar');
 
-        $this->assertEquals('AI:Once upon a time, in a distant kingdom, there lived a brave and noble knight. He had been sent on a quest by the King to explore a faraway land and bring back news of what he encountered. Armed with only his sword and shield, the knight set forth on his journey. Along the way, he encountered many strange creatures and encountered many magical and mysterious places. But most of all, he encountered danger at every turn. What will the knight discover on his quest?',
+        $this->assertEquals(' AI:Once upon a time, in a distant kingdom, there lived a brave and noble knight. He had been sent on a quest by the King to explore a faraway land and bring back news of what he encountered. Armed with only his sword and shield, the knight set forth on his journey. Along the way, he encountered many strange creatures and encountered many magical and mysterious places. But most of all, he encountered danger at every turn. What will the knight discover on his quest?',
             $previous['zipped'][0]);
-        $this->assertEquals('Human:I choose foo',
+        $this->assertEquals(' Human:I choose foo',
             $previous['zipped'][1]);
     }
 

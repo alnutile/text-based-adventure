@@ -1,0 +1,13 @@
+curl https://api.openai.com/v1/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -d '{
+  "model": "text-davinci-003",
+  "prompt": "Using the context and the following answer what is the next part of this text based scifi text adventure for the human to choose from here is the context: AI:You wake up in a strange room with no memory of how you got there. The walls are made of metal, and the only light is coming from a single window. You can feel a cold draft coming from the window, and it's clear that you are not on Earth. You look around the room, and see a door on the far side. What do you do next? A) Try to open the door B) Look around the room more closely C) Search for a way to escape\\\\nHuman:try to open the door\\\\nAI:The door is locked, but you can hear a faint humming sound coming from the other side. You try to pry the door open with your hands, but it won't budge. You look around the room for something to help you open the door, but you can't find anything. You decide to investigate the window. Human:try to go out the window what happens next? You take a closer look at the window, and see that it's made of thick glass. You can't see anything outside, as the window is too dark to make out what lies beyond. You also notice a small lever on the side of the window. What do you do next? A) Pull the lever B) Try to break the window C) Step back and think",
+  "temperature": 0.9,
+  "max_tokens": 150,
+  "top_p": 1,
+  "frequency_penalty": 0,
+  "presence_penalty": 0.6,
+  "stop": [" Human:", " AI:"]
+}'

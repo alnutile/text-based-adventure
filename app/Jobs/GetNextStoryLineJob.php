@@ -56,6 +56,7 @@ class GetNextStoryLineJob implements ShouldQueue
             /** @var ResponseDto $nextPartOfStory */
             /** @phpstan-ignore-next-line */
             $nextPartOfStory = TextClientFacade::setTemperature(0.7)
+                ->setStop($this->stops())
                 ->addPrefix($prefix)
                 ->text(str($validatedPlay)
                     ->append(' what happens next?')->toString());
@@ -65,33 +66,38 @@ class GetNextStoryLineJob implements ShouldQueue
 
             logger('NextPartOfStory', [$nextPartOfStory]);
 
-            $nextPartOfStory = $this->prefixStory(str($nextPartOfStory)
-                ->stripTags()->toString());
+            if ($nextPartOfStory === null) {
+                GetNextStoryLineJob::dispatch($this->sessionId,
+                    $this->play);
+            } else {
+                $nextPartOfStory = $this->prefixStory(str($nextPartOfStory)
+                    ->stripTags()->toString());
 
-            $story[] = $nextPartOfStory;
+                $story[] = $nextPartOfStory;
 
-            $play[] = $validatedPlay;
+                $play[] = $validatedPlay;
 
-            if (! empty($zippedArray)) {
-                $zippedArray[] = $validatedPlay;
+                if (! empty($zippedArray)) {
+                    $zippedArray[] = $validatedPlay;
+                }
+
+                if (! in_array($nextPartOfStory, $zippedArray)) {
+                    $zippedArray[] = $nextPartOfStory;
+                }
+
+                Cache::set($this->sessionId, [
+                    'genre' => $genre,
+                    'story' => $story,
+                    'player' => $play,
+                    'zipped' => $zippedArray,
+                ]);
+
+                $previous = Cache::get($this->sessionId);
+
+                StoryProgressionEvent::dispatch($this->sessionId,
+                    $nextPartOfStory,
+                    $previous);
             }
-
-            if (! in_array($nextPartOfStory, $zippedArray)) {
-                $zippedArray[] = $nextPartOfStory;
-            }
-
-            Cache::set($this->sessionId, [
-                'genre' => $genre,
-                'story' => $story,
-                'player' => $play,
-                'zipped' => $zippedArray,
-            ]);
-
-            $previous = Cache::get($this->sessionId);
-
-            StoryProgressionEvent::dispatch($this->sessionId,
-                $nextPartOfStory,
-                $previous);
         }
     }
 }
