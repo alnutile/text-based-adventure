@@ -84,12 +84,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/alnutile/laravel-chatgpt.git",
-                "reference": "cec404e943e99f7e61d6a56a343e181ba66b9390"
+                "reference": "f67dbd6ae1b3b0dfacf41838b6edc02defa26b5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alnutile/laravel-chatgpt/zipball/cec404e943e99f7e61d6a56a343e181ba66b9390",
-                "reference": "cec404e943e99f7e61d6a56a343e181ba66b9390",
+                "url": "https://api.github.com/repos/alnutile/laravel-chatgpt/zipball/f67dbd6ae1b3b0dfacf41838b6edc02defa26b5a",
+                "reference": "f67dbd6ae1b3b0dfacf41838b6edc02defa26b5a",
                 "shasum": ""
             },
             "require": {
@@ -151,9 +151,9 @@
             ],
             "support": {
                 "issues": "https://github.com/alnutile/laravel-chatgpt/issues",
-                "source": "https://github.com/alnutile/laravel-chatgpt/tree/main"
+                "source": "https://github.com/alnutile/laravel-chatgpt/tree/0.0.2"
             },
-            "time": "2023-02-12T02:00:49+00:00"
+            "time": "2023-02-13T05:08:06+00:00"
         },
         {
             "name": "brick/math",
