@@ -20,9 +20,9 @@ class StoryProgressionEvent implements ShouldBroadcast
      */
     public function __construct(public string $session_id, public string $next_story_line, public array $previous)
     {
-        $this->next_story_line = str($this->next_story_line)->whenStartsWith('AI: AI:',
+        $this->next_story_line = str($this->next_story_line)->whenStartsWith('AI:AI:',
             function (Stringable $next) {
-                return $next->replace('AI: AI:', ' AI:')->toString();
+                return $next->replace('AI:AI:', ' AI:')->toString();
             });
     }
 
