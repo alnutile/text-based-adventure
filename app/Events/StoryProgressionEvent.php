@@ -2,16 +2,17 @@
 
 namespace App\Events;
 
+use App\Jobs\StoryHelperTrait;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Stringable;
 
 class StoryProgressionEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+    use StoryHelperTrait;
 
     /**
      * Create a new event instance.
@@ -20,10 +21,7 @@ class StoryProgressionEvent implements ShouldBroadcast
      */
     public function __construct(public string $session_id, public string $next_story_line, public array $previous)
     {
-        $this->next_story_line = str($this->next_story_line)->whenStartsWith('AI:AI:',
-            function (Stringable $next) {
-                return $next->replace('AI:AI:', ' AI:')->toString();
-            });
+        $this->next_story_line = $this->prefixStory($this->next_story_line);
     }
 
     /**
