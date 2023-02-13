@@ -46,7 +46,7 @@ class GetNextStoryLineJob implements ShouldQueue
         $moderationOk = ModerationClientFacade::checkOk($validatedPlay);
 
         if ($moderationOk == false) {
-            logger("Moderation Failed", [$validatedPlay]);
+            logger('Moderation Failed', [$validatedPlay]);
             ModerationFailed::dispatch(request());
         } else {
             $zippedArray = data_get($previous, 'zipped', []);
