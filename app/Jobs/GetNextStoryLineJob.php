@@ -50,7 +50,7 @@ class GetNextStoryLineJob implements ShouldQueue
             $zippedArray = data_get($previous, 'zipped', []);
             $genre = data_get($previous, 'genre');
             $context = implode('\n', $zippedArray);
-            $prefix = sprintf('Using the context and the following answer what is the next part of this text based %s text adventure for the player to choose from here is the context %s', $genre, $context);
+            $prefix = sprintf('Using the context and the following answer what is the next part of this text based %s text adventure for the human to choose from here is the context: %s', $genre, $context);
             /** @var ResponseDto $nextPartOfStory */
             /** @phpstan-ignore-next-line */
             $nextPartOfStory = TextClientFacade::setTemperature(0.7)
@@ -60,6 +60,8 @@ class GetNextStoryLineJob implements ShouldQueue
 
             $nextPartOfStory = optional(Arr::first($nextPartOfStory->messages))
                 ->message;
+
+            logger("NextPartOfStory", [$nextPartOfStory]);
 
             $nextPartOfStory = $this->prefixStory(str($nextPartOfStory)
                 ->stripTags()->toString());

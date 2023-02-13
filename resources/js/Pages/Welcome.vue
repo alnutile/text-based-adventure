@@ -6,11 +6,13 @@
                     <div class="flex mx-auto justify-center gap-4 mt-4">
                         <button type="button"
                                 @click="setGenre('fantasy')"
+                                :class="{'ring-2 ring-green-500 ring-offset-2' : genre === 'fantasy'}"
                                 class="inline-flex items-center rounded border border-transparent bg-green-400
                                 px-2.5 py-1.5 text-lg font-medium text-green-800 hover:bg-green-200
                                 focus:outline-none
                                 focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Fantasy</button>
                         <button
+                            :class="{'ring-2 ring-green-500 ring-offset-2' : genre === 'scifi'}"
                             @click="setGenre('scifi')"
                             type="button"
                                 class="inline-flex items-center rounded border border-transparent bg-green-400
